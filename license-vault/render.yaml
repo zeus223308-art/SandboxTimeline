@@ -1,0 +1,32 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Dashboard → New → Blueprint → connect this repo (license-vault folder) or paste this file.
+services:
+  - type: web
+    name: sandboxtimeline-license-vault
+    runtime: node
+    plan: free
+    rootDir: license-vault
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: BASE_URL
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_ID
+        sync: false
+      - key: LICENSE_VAULT_SECRET
+        generateValue: true
+      - key: PRODUCT_METADATA_ID
+        value: prod_sandbox_timeline_premium_v1
+      - key: DATABASE_PATH
+        value: /var/data/licenses.db
+    disk:
+      name: license-vault-data
+      mountPath: /var/data
+      sizeGB: 1

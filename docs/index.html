@@ -23,12 +23,20 @@
            rel="noopener">
           최신 버전 다운로드 (.zip)
         </a>
+        <a id="buyPremiumBtn"
+           class="btn btn-secondary"
+           href="#"
+           rel="noopener"
+           aria-disabled="true">
+          프리미엄 구매 (Stripe)
+        </a>
         <a class="btn btn-secondary" href="https://github.com/zeus223308-art/SandboxTimeline" rel="noopener">
           GitHub 저장소
         </a>
       </div>
       <p class="note">
         이 사이트는 소개용 웹 페이지입니다. Sandbox Timeline은 Windows 데스크톱 앱이며 브라우저에서 실행되지 않습니다.
+        프리미엄 구매는 License Vault 서버 배포 후 <code>docs/purchase-config.js</code>의 <code>vaultBaseUrl</code>을 설정하세요.
       </p>
     </div>
   </header>
@@ -81,6 +89,8 @@
     <p>© 2026 Sandbox Timeline · <a href="https://github.com/zeus223308-art/SandboxTimeline">zeus223308-art/SandboxTimeline</a></p>
     <p id="latestVersionNote" class="version-note"></p>
   </footer>
+  <script src="purchase-config.js"></script>
+  <script src="purchase.js"></script>
   <script src="download-latest.js"></script>
 </body>
 </html>

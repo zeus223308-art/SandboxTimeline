@@ -37,7 +37,24 @@ Place a 256×256 `icon.ico` in `assets\icon.ico` before building the installer.
 
 Output: `dist\SandboxTimeline-Setup-1.0.0.exe`
 
-## License webhook
+## License Vault (Stripe → license key → app)
+
+The desktop app does **not** talk to Stripe directly. Use the Node server in `license-vault/`:
+
+- Stripe Checkout + Webhook
+- Success page + optional email with the license key
+- `POST /v1/license/validate` for the Windows app
+
+See [license-vault/README.md](license-vault/README.md) for setup (Stripe CLI, `.env`, deploy).
+
+Point the app at your server:
+
+```powershell
+$env:SANDBOXTIMELINE_LICENSE_VAULT_URL = "https://api.yourdomain.com/v1/license/validate"
+$env:SANDBOXTIMELINE_LICENSE_VAULT_SECRET = "same-as-LICENSE_VAULT_SECRET-on-server"
+```
+
+## License webhook (legacy note)
 
 Set your validation endpoint in `LicenseManager.cs` or pass a custom URL when constructing `LicenseManager`. Expected JSON:
 

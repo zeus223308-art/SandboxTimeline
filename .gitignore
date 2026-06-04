@@ -20,6 +20,11 @@ publish-test/
 dist/
 *.zip
 
+# License Vault (Node)
+license-vault/node_modules/
+license-vault/data/
+license-vault/.env
+
 # Secrets and local config
 .env
 .env.*
