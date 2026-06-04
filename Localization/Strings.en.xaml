@@ -34,6 +34,7 @@
     <system:String x:Key="Str_StartupFailedStatus">An error occurred during startup.</system:String>
     <system:String x:Key="Str_AutoUpdateApplying">Applying the latest security patch safely...</system:String>
     <system:String x:Key="Str_AutoUpdateDownloading">Downloading the latest version safely...</system:String>
+    <system:String x:Key="Str_AutoUpdateRestartSoon">Applying a new version. The app will restart in a moment...</system:String>
     <system:String x:Key="Str_ActivatePremiumLicense">Activate Premium License</system:String>
     <system:String x:Key="Str_EnterLicenseKey">Enter license key</system:String>
     <system:String x:Key="Str_ValidateLicense">Validate License</system:String>

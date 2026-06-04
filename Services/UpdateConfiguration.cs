@@ -29,6 +29,38 @@ internal static class UpdateConfiguration
             : fromEnvironment;
     }
 
+    /// <summary>
+    /// Silent in-place updates are unsafe under sync folders (OneDrive) and often look like an instant crash.
+    /// </summary>
+    public static bool IsUnsafeAutoUpdateTargetDirectory(string targetDirectory)
+    {
+        if (string.IsNullOrWhiteSpace(targetDirectory))
+        {
+            return true;
+        }
+
+        try
+        {
+            var fullPath = Path.GetFullPath(targetDirectory);
+            if (fullPath.Contains("OneDrive", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (fullPath.Contains("iCloudDrive", StringComparison.OrdinalIgnoreCase) ||
+                fullPath.Contains("Dropbox", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+        catch
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private static bool? ReadOptionalBooleanEnvironmentVariable(string variableName)
     {
         var rawValue = Environment.GetEnvironmentVariable(variableName)?.Trim();

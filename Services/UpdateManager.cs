@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 
 namespace SandboxTimeline;
@@ -91,6 +92,13 @@ public sealed class UpdateManager
                 .ConfigureAwait(false);
 
             var targetDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            if (UpdateConfiguration.IsUnsafeAutoUpdateTargetDirectory(targetDirectory))
+            {
+                StartupDiagnostics.Log(
+                    $"Silent auto-update bypassed: unsafe target directory '{targetDirectory}' (sync folder such as OneDrive).");
+                return false;
+            }
+
             var executablePath = ResolveApplicationExecutablePath(targetDirectory);
             if (!File.Exists(executablePath))
             {
@@ -292,8 +300,16 @@ public sealed class UpdateManager
         scriptBuilder.AppendLine("robocopy \"%STAGING%\" \"%TARGET%\" /E /IS /IT /R:2 /W:1 /NFL /NDL /NJH /NJS /NC /NS");
         scriptBuilder.AppendLine("set ROBO=%ERRORLEVEL%");
         scriptBuilder.AppendLine("if %ROBO% GEQ 8 exit /b %ROBO%");
-        scriptBuilder.AppendLine(
-            "powershell -NoProfile -WindowStyle Hidden -Command \"Start-Process -FilePath '%EXE%' -ArgumentList '--skip-update' -Verb RunAs -WorkingDirectory '%TARGET%'\"");
+        if (IsRunningAsAdministrator())
+        {
+            scriptBuilder.AppendLine("start \"\" /D \"%TARGET%\" \"%EXE%\" --skip-update");
+        }
+        else
+        {
+            scriptBuilder.AppendLine(
+                "powershell -NoProfile -WindowStyle Hidden -Command \"Start-Process -FilePath '%EXE%' -ArgumentList '--skip-update' -Verb RunAs -WorkingDirectory '%TARGET%'\"");
+        }
+
         scriptBuilder.AppendLine("del \"%~f0\"");
         File.WriteAllText(scriptPath, scriptBuilder.ToString(), Encoding.UTF8);
 
@@ -308,6 +324,13 @@ public sealed class UpdateManager
     }
 
     private static string QuoteForCmd(string value) => value.Replace("\"", "\"\"");
+
+    private static bool IsRunningAsAdministrator()
+    {
+        using var identity = WindowsIdentity.GetCurrent();
+        var principal = new WindowsPrincipal(identity);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+    }
 
     private sealed record RemoteVersionManifest(string LatestVersion, string PackageDownloadUrl);
 }

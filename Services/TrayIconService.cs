@@ -135,7 +135,12 @@ public sealed class TrayIconService : IDisposable
 
         try
         {
-            var executablePath = Assembly.GetExecutingAssembly().Location;
+            var executablePath = Environment.ProcessPath;
+            if (string.IsNullOrWhiteSpace(executablePath))
+            {
+                executablePath = Assembly.GetExecutingAssembly().Location;
+            }
+
             if (!string.IsNullOrWhiteSpace(executablePath))
             {
                 var associatedIcon = Icon.ExtractAssociatedIcon(executablePath);
