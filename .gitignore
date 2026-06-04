@@ -39,5 +39,5 @@ Desktop.ini
 # Logs (local diagnostics only)
 startup.log
 
-# Legacy duplicate tree (not built by main csproj)
-src/
+# Legacy duplicate tree at repo root (not built by main csproj)
+/src/
