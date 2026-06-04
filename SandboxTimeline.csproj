@@ -45,12 +45,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\icon.ico" />
+    <Resource Include="assets\icon.ico">
+      <Link>assets\icon.ico</Link>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="assets\icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <Link>assets\icon.ico</Link>
     </Content>
   </ItemGroup>

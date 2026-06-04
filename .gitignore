@@ -16,6 +16,7 @@ project.lock.json
 
 # Publish / artifacts
 publish/
+publish-test/
 dist/
 *.zip
 
