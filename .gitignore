@@ -16,6 +16,7 @@ project.lock.json
 
 # Publish / artifacts
 publish/
+dist/
 *.zip
 
 # Secrets and local config

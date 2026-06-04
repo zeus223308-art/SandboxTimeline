@@ -1,12 +1,15 @@
 # Sandbox Timeline build script
 param(
-    [switch]$Installer
+    [switch]$Installer,
+    [switch]$Zip
 )
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 $project = Join-Path $root "SandboxTimeline.csproj"
 $publishDir = Join-Path $root "bin\Release\net8.0-windows\win-x64\publish"
+$distDir = Join-Path $root "dist"
+$zipPath = Join-Path $distDir "SandboxTimeline-win-x64.zip"
 
 Write-Host "Restoring packages..."
 dotnet restore $project
@@ -20,6 +23,21 @@ dotnet publish $project -c Release -r win-x64 `
     -o $publishDir
 
 Write-Host "Published to: $publishDir"
+
+if ($Zip) {
+    if (-not (Test-Path $distDir)) {
+        New-Item -ItemType Directory -Path $distDir -Force | Out-Null
+    }
+
+    if (Test-Path $zipPath) {
+        Remove-Item $zipPath -Force
+    }
+
+    Write-Host "Creating release zip: $zipPath"
+    Compress-Archive -Path (Join-Path $publishDir '*') -DestinationPath $zipPath -CompressionLevel Optimal
+    Write-Host "Zip ready: $zipPath"
+    Write-Host "Upload: gh release create v1.0.0 `"$zipPath`" --title `"v1.0.0`""
+}
 
 if ($Installer) {
     $iscc = @(

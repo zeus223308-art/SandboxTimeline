@@ -7,7 +7,7 @@ internal static class UpdateConfiguration
 {
     public const string VersionManifestUrlEnvironmentVariable = "SANDBOXTIMELINE_UPDATE_VERSION_URL";
     public const string UpdateEnabledEnvironmentVariable = "SANDBOXTIMELINE_UPDATE_ENABLED";
-    public const string DefaultVersionManifestUrl = "https://releases.sandboxtimeline.app/version.txt";
+    public const string DefaultVersionManifestUrl = "https://raw.githubusercontent.com/zeus223308-art/SandboxTimeline/master/docs/version.txt";
     public const string SkipUpdateArgument = "--skip-update";
 
     public static bool IsAutoUpdateEnabled()
