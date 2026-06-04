@@ -1,0 +1,36 @@
+# Build outputs
+bin/
+obj/
+
+# User-specific / IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+project.lock.json
+
+# Publish / artifacts
+publish/
+*.zip
+
+# Secrets and local config
+.env
+.env.*
+*.pfx
+premium.license.enc
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs (local diagnostics only)
+startup.log
+
+# Legacy duplicate tree (not built by main csproj)
+src/

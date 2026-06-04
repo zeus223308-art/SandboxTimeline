@@ -1,0 +1,108 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="Str_WindowTitle">Sandbox Timeline</system:String>
+    <system:String x:Key="Str_AppTitle">Sandbox Timeline</system:String>
+    <system:String x:Key="Str_GlobalHotkeyDisplay">Ctrl + Win + Z</system:String>
+    <system:String x:Key="Str_SubtitleFormat">PC용 {0} — 즉시 스냅샷 &amp; 안전한 앱 테스트</system:String>
+    <system:String x:Key="Str_LicenseBadgeFree">무료</system:String>
+    <system:String x:Key="Str_LicenseBadgePremium">프리미엄</system:String>
+
+    <system:String x:Key="Str_SystemTimeSlider">시스템 시간 슬라이더</system:String>
+    <system:String x:Key="Str_SystemTimeSliderDesc">왼쪽은 과거 스냅샷, 오른쪽은 지금 PC 상태입니다. 슬라이더를 움직여 되돌릴 시점을 고르세요.</system:String>
+    <system:String x:Key="Str_TimelinePast">🕒 과거 (Past State)</system:String>
+    <system:String x:Key="Str_TimelineCurrent">⚡ 현재 (Current State)</system:String>
+    <system:String x:Key="Str_TimelineSliderToolTip">과거 스냅샷(왼쪽)에서 현재 상태(오른쪽)까지 시간축을 이동합니다.</system:String>
+
+    <system:String x:Key="Str_NoSnapshotsYet">아직 스냅샷이 없습니다</system:String>
+    <system:String x:Key="Str_TakeSnapshot">스냅샷 만들기</system:String>
+    <system:String x:Key="Str_TakeSnapshotToolTip">현재 깨끗한 PC 상태를 타임머신 지점으로 저장합니다.</system:String>
+    <system:String x:Key="Str_RollbackNow">지금 되돌리기</system:String>
+    <system:String x:Key="Str_RollbackNowToolTip">선택한 과거 시점으로 PC를 즉시 되돌립니다.</system:String>
+    <system:String x:Key="Str_SandboxGuardOn">샌드박스 가드: 켜짐</system:String>
+    <system:String x:Key="Str_SandboxGuardOff">샌드박스 가드: 꺼짐</system:String>
+    <system:String x:Key="Str_SandboxGuardToolTip">의심스러운 파일 실행 시 자동으로 가상 격리 공간을 생성합니다.</system:String>
+
+    <system:String x:Key="Str_PremiumRecoveryTagline">윈도우 복원보다 12배 빠른 재부팅 제로 1초 복구 기술 가동 중</system:String>
+    <system:String x:Key="Str_StorageQuotaReclaimedFormat">저장 용량 한도 도달 — 오래된 스냅샷 {0}개를 자동 정리했습니다.</system:String>
+    <system:String x:Key="Str_GameModePausedStatus">온라인 게임 감지 — 핫키·폴더 감시를 일시 중지했습니다.</system:String>
+    <system:String x:Key="Str_SandboxStopConfirmTitle">샌드박스 가드 종료</system:String>
+    <system:String x:Key="Str_SandboxStopConfirmBody">가상 공간 안의 중요 파일을 바탕화면의 'Sandbox_Shared' 폴더로 꺼내셨나요?&#10;창을 닫으면 완전히 소멸합니다.&#10;&#10;샌드박스 가드를 끄시겠습니까?</system:String>
+    <system:String x:Key="Str_StatusReady">준비됨.</system:String>
+    <system:String x:Key="Str_StartupLoading">시작 중...</system:String>
+    <system:String x:Key="Str_StartupFailedStatus">시작 중 오류가 발생했습니다.</system:String>
+    <system:String x:Key="Str_AutoUpdateApplying">최신 보안 패치를 안전하게 적용 중입니다...</system:String>
+    <system:String x:Key="Str_AutoUpdateDownloading">최신 버전을 안전하게 다운로드 중입니다...</system:String>
+    <system:String x:Key="Str_ActivatePremiumLicense">프리미엄 라이선스 활성화</system:String>
+    <system:String x:Key="Str_EnterLicenseKey">라이선스 키 입력</system:String>
+    <system:String x:Key="Str_ValidateLicense">라이선스 확인</system:String>
+
+    <system:String x:Key="Str_WelcomeTitle">👋 Sandbox Timeline에 오신 것을 환영합니다!</system:String>
+    <system:String x:Key="Str_WelcomeSubtitle">PC를 타임머신처럼 되돌리고, 위험한 프로그램은 안전하게 격리해 보세요.</system:String>
+    <system:String x:Key="Str_WelcomeTakeSnapshotTitle">📸 스냅샷 만들기</system:String>
+    <system:String x:Key="Str_WelcomeTakeSnapshotBody">지금 PC 상태를 저장해 두면, 나중에 언제든 그 시점으로 돌아갈 수 있습니다.</system:String>
+    <system:String x:Key="Str_WelcomeHotkeyTitle">⌨️ 전역 단축키</system:String>
+    <system:String x:Key="Str_WelcomeHotkeyBodyFormat">어디서든 {0}를 누르면 Sandbox Timeline 창이 화면 중앙으로 열립니다. (일반 Ctrl+Z 실행 취소와 충돌하지 않습니다.)</system:String>
+    <system:String x:Key="Str_WelcomeSliderTitle">⏪ 시스템 시간 슬라이더 + 지금 되돌리기</system:String>
+    <system:String x:Key="Str_WelcomeSliderBody">슬라이더 왼쪽(🕒 과거)에서 시점을 고른 뒤 지금 되돌리기로 즉시 복원합니다.</system:String>
+    <system:String x:Key="Str_WelcomeSandboxTitle">🛡️ 샌드박스 가드</system:String>
+    <system:String x:Key="Str_WelcomeSandboxBody">다운로드·바탕화면의 실행 파일을 감시하고, 의심 프로그램은 가상 격리 공간에서 실행합니다.</system:String>
+    <system:String x:Key="Str_DontShowWelcomeAgain">다시 보지 않기</system:String>
+    <system:String x:Key="Str_WelcomeSmartScreenTitle">ℹ️ 안전 안내</system:String>
+    <system:String x:Key="Str_WelcomeSmartScreenBody">최초 실행 시 윈도우 SmartScreen 파란색 경고창이 나타날 수 있습니다. 이는 정식 배포 준비 단계에서 발생하는 정상적인 현상이며, [추가 정보] → [실행]을 누르시면 시스템 트레이에서 100% 안전하게 구동됩니다.</system:String>
+    <system:String x:Key="Str_LicenseSubscriptionRevoked">구독이 취소되었거나 환불되어 프리미엄 기능이 해제되었습니다. 라이선스를 다시 입력해 주세요.</system:String>
+    <system:String x:Key="Str_LicenseOfflineGraceExpired">오프라인 상태가 72시간을 초과하여 프리미엄이 해제되었습니다. 인터넷에 연결한 뒤 라이선스를 다시 검증해 주세요.</system:String>
+    <system:String x:Key="Str_GetStarted">시작하기</system:String>
+
+    <system:String x:Key="Str_TimeSliderReady">시간 슬라이더 준비됨 — 스냅샷을 선택한 뒤 되돌리세요.</system:String>
+    <system:String x:Key="Str_NoSnapshotsTakeFirst">아직 스냅샷이 없습니다 — 되돌리기를 사용하려면 하나를 만드세요.</system:String>
+    <system:String x:Key="Str_SnapshotCountFormat">스냅샷 {0}개</system:String>
+    <system:String x:Key="Str_FirstSnapshotHint">첫 스냅샷을 만들면 되돌리기를 사용할 수 있습니다.</system:String>
+    <system:String x:Key="Str_CreatingSnapshot">스냅샷 생성 중...</system:String>
+    <system:String x:Key="Str_SnapshotSaved">스냅샷이 저장되었습니다.</system:String>
+    <system:String x:Key="Str_RollingBack">되돌리는 중...</system:String>
+    <system:String x:Key="Str_RollbackFinished">되돌리기가 완료되었습니다.</system:String>
+    <system:String x:Key="Str_SandboxVtDisabled">❌ 현재 PC의 CPU 가상화(VT) 설정이 꺼져 있어 샌드박스를 구동할 수 없습니다. BIOS 설정을 확인해 주세요.</system:String>
+    <system:String x:Key="Str_WindowsHomeSandboxUnsupported">ℹ️ Windows 11 Home 에디션은 타임라인 복구만 지원합니다.</system:String>
+    <system:String x:Key="Str_SandboxFeatureDisabled">❌ Windows Sandbox 기능이 비활성화되어 있습니다. Windows 기능 켜기/끄기에서 'Windows Sandbox'를 활성화해 주세요.</system:String>
+    <system:String x:Key="Str_SandboxGuardDisabled">샌드박스 가드가 꺼졌습니다.</system:String>
+    <system:String x:Key="Str_SandboxGuardOffSelectFolder">샌드박스 가드가 꺼져 있습니다 — 폴더를 선택해 활성화하세요.</system:String>
+    <system:String x:Key="Str_ValidatingLicense">라이선스 확인 중...</system:String>
+    <system:String x:Key="Str_PremiumActivated">프리미엄 라이선스가 활성화되었습니다.</system:String>
+    <system:String x:Key="Str_PremiumActivatedThanks">프리미엄 라이선스가 활성화되었습니다. 감사합니다!</system:String>
+    <system:String x:Key="Str_LicenseValidationFailed">라이선스 확인에 실패했습니다.</system:String>
+    <system:String x:Key="Str_LicenseValidationFailedSoft">올바르지 않은 라이선스 키이거나 네트워크 오류입니다. 다시 시도해 주세요.</system:String>
+    <system:String x:Key="Str_LicenseErrorOneLine">❌ 올바르지 않은 라이선스 키입니다.</system:String>
+    <system:String x:Key="Str_BtnRetry">다시 시도</system:String>
+    <system:String x:Key="Str_SandboxGuardingFormat">샌드박스 감시: {0}</system:String>
+    <system:String x:Key="Str_SandboxGuardingTwoFormat">샌드박스 감시: {0}, {1}</system:String>
+    <system:String x:Key="Str_SandboxedWithPathFormat">{0} — 샌드박스 실행: {1}</system:String>
+    <system:String x:Key="Str_SandboxedExecutableFormat">샌드박스에서 실행한 파일: {0}</system:String>
+    <system:String x:Key="Str_SnapshotReadyFormat">스냅샷 #{0} 준비됨 — 추적된 변경 {1}건.</system:String>
+    <system:String x:Key="Str_SnapshotDetailFormat">{0} — 변경 {1}건, {2} 추적</system:String>
+    <system:String x:Key="Str_TrackingUsn">USN</system:String>
+    <system:String x:Key="Str_TrackingHash">해시</system:String>
+
+    <system:String x:Key="Str_ConfirmRollbackTitle">되돌리기 확인</system:String>
+    <system:String x:Key="Str_ConfirmRollbackBody">다음 시점으로 시스템을 복원합니다:&#10;{0}&#10;{1}&#10;&#10;레지스트리와 사용자 파일이 되돌아갑니다. 계속할까요?</system:String>
+    <system:String x:Key="Str_AdminRequired">관리자 권한 필요</system:String>
+    <system:String x:Key="Str_DiskIoError">디스크 I/O 오류</system:String>
+    <system:String x:Key="Str_SnapshotError">스냅샷 오류</system:String>
+    <system:String x:Key="Str_Rollback">되돌리기</system:String>
+    <system:String x:Key="Str_RollbackNeedSnapshot">되돌리기 전에 스냅샷을 하나 이상 만드세요.</system:String>
+    <system:String x:Key="Str_RollbackError">되돌리기 오류</system:String>
+    <system:String x:Key="Str_PremiumFeature">프리미엄 기능</system:String>
+    <system:String x:Key="Str_PremiumFeatureBody">자동 샌드박스 격리는 프리미엄 기능입니다. 라이선스를 활성화하거나 계정에서 체험판을 사용하세요.</system:String>
+    <system:String x:Key="Str_SandboxGuardDialogTitle">샌드박스 가드</system:String>
+    <system:String x:Key="Str_SandboxGuardStartFailed">다음 경로에서 샌드박스 가드를 시작할 수 없습니다:&#10;{0}&#10;&#10;{1}</system:String>
+    <system:String x:Key="Str_License">라이선스</system:String>
+    <system:String x:Key="Str_EnterLicenseKeyMessage">라이선스 키를 입력하세요.</system:String>
+    <system:String x:Key="Str_LicenseInvalidMessage">라이선스 키를 확인할 수 없습니다.</system:String>
+    <system:String x:Key="Str_Ok">확인</system:String>
+    <system:String x:Key="Str_ErrorPrefix">오류: {0}</system:String>
+    <system:String x:Key="Str_SnapshotFailedFormat">오류: 스냅샷 실패 — {0}</system:String>
+    <system:String x:Key="Str_RollbackFailedFormat">되돌리기 실패: {0}</system:String>
+    <system:String x:Key="Str_TrayStillRunning">Sandbox Timeline이 시스템 트레이에서 계속 실행 중입니다.</system:String>
+
+</ResourceDictionary>

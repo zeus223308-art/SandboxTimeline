@@ -1,0 +1,108 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="Str_WindowTitle">Sandbox Timeline</system:String>
+    <system:String x:Key="Str_AppTitle">Sandbox Timeline</system:String>
+    <system:String x:Key="Str_GlobalHotkeyDisplay">Ctrl + Win + Z</system:String>
+    <system:String x:Key="Str_SubtitleFormat">{0} for your PC — instant snapshots &amp; safe app testing</system:String>
+    <system:String x:Key="Str_LicenseBadgeFree">Free</system:String>
+    <system:String x:Key="Str_LicenseBadgePremium">Premium</system:String>
+
+    <system:String x:Key="Str_SystemTimeSlider">System Time Slider</system:String>
+    <system:String x:Key="Str_SystemTimeSliderDesc">Left is a past snapshot; right is your PC now. Move the slider to choose a restore point.</system:String>
+    <system:String x:Key="Str_TimelinePast">🕒 Past (Past State)</system:String>
+    <system:String x:Key="Str_TimelineCurrent">⚡ Now (Current State)</system:String>
+    <system:String x:Key="Str_TimelineSliderToolTip">Move along the timeline from past snapshots (left) to the current state (right).</system:String>
+
+    <system:String x:Key="Str_NoSnapshotsYet">No snapshots yet</system:String>
+    <system:String x:Key="Str_TakeSnapshot">Take Snapshot</system:String>
+    <system:String x:Key="Str_TakeSnapshotToolTip">Save a clean restore point of your PC right now.</system:String>
+    <system:String x:Key="Str_RollbackNow">Rollback Now</system:String>
+    <system:String x:Key="Str_RollbackNowToolTip">Instantly restore your PC to the selected past point.</system:String>
+    <system:String x:Key="Str_SandboxGuardOn">Sandbox Guard: On</system:String>
+    <system:String x:Key="Str_SandboxGuardOff">Sandbox Guard: Off</system:String>
+    <system:String x:Key="Str_SandboxGuardToolTip">Automatically isolate suspicious executables in a virtual sandbox.</system:String>
+
+    <system:String x:Key="Str_PremiumRecoveryTagline">Zero-reboot 1-second recovery — up to 12× faster than Windows Restore</system:String>
+    <system:String x:Key="Str_StorageQuotaReclaimedFormat">Storage cap reached — automatically removed {0} oldest snapshot(s).</system:String>
+    <system:String x:Key="Str_GameModePausedStatus">Online game detected — hotkey and folder watch paused.</system:String>
+    <system:String x:Key="Str_SandboxStopConfirmTitle">Disable Sandbox Guard</system:String>
+    <system:String x:Key="Str_SandboxStopConfirmBody">Did you move important files from the virtual sandbox to the Desktop 'Sandbox_Shared' folder?&#10;Closing the sandbox will destroy them permanently.&#10;&#10;Turn off Sandbox Guard?</system:String>
+    <system:String x:Key="Str_StatusReady">Ready.</system:String>
+    <system:String x:Key="Str_StartupLoading">Starting...</system:String>
+    <system:String x:Key="Str_StartupFailedStatus">An error occurred during startup.</system:String>
+    <system:String x:Key="Str_AutoUpdateApplying">Applying the latest security patch safely...</system:String>
+    <system:String x:Key="Str_AutoUpdateDownloading">Downloading the latest version safely...</system:String>
+    <system:String x:Key="Str_ActivatePremiumLicense">Activate Premium License</system:String>
+    <system:String x:Key="Str_EnterLicenseKey">Enter license key</system:String>
+    <system:String x:Key="Str_ValidateLicense">Validate License</system:String>
+
+    <system:String x:Key="Str_WelcomeTitle">👋 Welcome to Sandbox Timeline!</system:String>
+    <system:String x:Key="Str_WelcomeSubtitle">Turn back your PC like a time machine and run risky programs in safe isolation.</system:String>
+    <system:String x:Key="Str_WelcomeTakeSnapshotTitle">📸 Take Snapshot</system:String>
+    <system:String x:Key="Str_WelcomeTakeSnapshotBody">Save your PC state now so you can return to this moment anytime later.</system:String>
+    <system:String x:Key="Str_WelcomeHotkeyTitle">⌨️ Global Hotkey</system:String>
+    <system:String x:Key="Str_WelcomeHotkeyBodyFormat">Press {0} anywhere to bring Sandbox Timeline to the center of your screen. (Does not conflict with normal Ctrl+Z undo.)</system:String>
+    <system:String x:Key="Str_WelcomeSliderTitle">⏪ System Time Slider + Rollback Now</system:String>
+    <system:String x:Key="Str_WelcomeSliderBody">Pick a point on the left (🕒 past), then use Rollback Now to restore instantly.</system:String>
+    <system:String x:Key="Str_WelcomeSandboxTitle">🛡️ Sandbox Guard</system:String>
+    <system:String x:Key="Str_WelcomeSandboxBody">Watches Downloads and your desktop for executables and runs suspicious apps in an isolated sandbox.</system:String>
+    <system:String x:Key="Str_DontShowWelcomeAgain">Don't show again</system:String>
+    <system:String x:Key="Str_WelcomeSmartScreenTitle">ℹ️ Safety notice</system:String>
+    <system:String x:Key="Str_WelcomeSmartScreenBody">On first launch, Windows SmartScreen may show a blue warning. This is normal before official code signing is applied. Choose More info → Run anyway; the app will then run safely from the system tray.</system:String>
+    <system:String x:Key="Str_LicenseSubscriptionRevoked">Your subscription was canceled or refunded. Premium features were disabled. Please enter your license again.</system:String>
+    <system:String x:Key="Str_LicenseOfflineGraceExpired">Premium was disabled after 72 hours offline. Connect to the internet and re-validate your license.</system:String>
+    <system:String x:Key="Str_GetStarted">Get Started</system:String>
+
+    <system:String x:Key="Str_TimeSliderReady">Time slider ready — pick a snapshot and roll back.</system:String>
+    <system:String x:Key="Str_NoSnapshotsTakeFirst">No snapshots yet — take one to enable rollback.</system:String>
+    <system:String x:Key="Str_SnapshotCountFormat">{0} snapshot(s)</system:String>
+    <system:String x:Key="Str_FirstSnapshotHint">Take your first snapshot to enable rollback.</system:String>
+    <system:String x:Key="Str_CreatingSnapshot">Creating snapshot...</system:String>
+    <system:String x:Key="Str_SnapshotSaved">Snapshot saved.</system:String>
+    <system:String x:Key="Str_RollingBack">Rolling back...</system:String>
+    <system:String x:Key="Str_RollbackFinished">Rollback finished successfully.</system:String>
+    <system:String x:Key="Str_SandboxVtDisabled">❌ CPU virtualization (VT) is disabled. Sandbox Guard cannot run until VT is enabled in BIOS.</system:String>
+    <system:String x:Key="Str_WindowsHomeSandboxUnsupported">ℹ️ Windows 11 Home supports timeline recovery only.</system:String>
+    <system:String x:Key="Str_SandboxFeatureDisabled">❌ Windows Sandbox is disabled. Turn on the Windows Sandbox optional feature in Windows Features.</system:String>
+    <system:String x:Key="Str_SandboxGuardDisabled">Sandbox guard disabled.</system:String>
+    <system:String x:Key="Str_SandboxGuardOffSelectFolder">Sandbox guard is off — select a folder to enable guarding.</system:String>
+    <system:String x:Key="Str_ValidatingLicense">Validating license...</system:String>
+    <system:String x:Key="Str_PremiumActivated">Premium license activated.</system:String>
+    <system:String x:Key="Str_PremiumActivatedThanks">Premium license activated. Thank you!</system:String>
+    <system:String x:Key="Str_LicenseValidationFailed">License validation failed.</system:String>
+    <system:String x:Key="Str_LicenseValidationFailedSoft">Invalid license key or network error. Please try again.</system:String>
+    <system:String x:Key="Str_LicenseErrorOneLine">❌ Invalid license key.</system:String>
+    <system:String x:Key="Str_BtnRetry">Try Again</system:String>
+    <system:String x:Key="Str_SandboxGuardingFormat">Sandbox Guarding: {0}</system:String>
+    <system:String x:Key="Str_SandboxGuardingTwoFormat">Sandbox Guarding: {0}, {1}</system:String>
+    <system:String x:Key="Str_SandboxedWithPathFormat">{0} — sandboxed: {1}</system:String>
+    <system:String x:Key="Str_SandboxedExecutableFormat">Sandboxed executable: {0}</system:String>
+    <system:String x:Key="Str_SnapshotReadyFormat">Snapshot #{0} ready — {1} tracked change(s).</system:String>
+    <system:String x:Key="Str_SnapshotDetailFormat">{0} — {1} change(s), {2} tracking</system:String>
+    <system:String x:Key="Str_TrackingUsn">USN</system:String>
+    <system:String x:Key="Str_TrackingHash">Hash</system:String>
+
+    <system:String x:Key="Str_ConfirmRollbackTitle">Confirm Rollback</system:String>
+    <system:String x:Key="Str_ConfirmRollbackBody">Restore system state to:&#10;{0}&#10;{1}&#10;&#10;This will revert registry and user files. Continue?</system:String>
+    <system:String x:Key="Str_AdminRequired">Administrator Required</system:String>
+    <system:String x:Key="Str_DiskIoError">Disk I/O Error</system:String>
+    <system:String x:Key="Str_SnapshotError">Snapshot Error</system:String>
+    <system:String x:Key="Str_Rollback">Rollback</system:String>
+    <system:String x:Key="Str_RollbackNeedSnapshot">Create at least one snapshot before rolling back.</system:String>
+    <system:String x:Key="Str_RollbackError">Rollback Error</system:String>
+    <system:String x:Key="Str_PremiumFeature">Premium Feature</system:String>
+    <system:String x:Key="Str_PremiumFeatureBody">Automatic sandbox isolation is a Premium feature. Activate a license or enable trial in your account.</system:String>
+    <system:String x:Key="Str_SandboxGuardDialogTitle">Sandbox Guard</system:String>
+    <system:String x:Key="Str_SandboxGuardStartFailed">Could not start Sandbox Guard for:&#10;{0}&#10;&#10;{1}</system:String>
+    <system:String x:Key="Str_License">License</system:String>
+    <system:String x:Key="Str_EnterLicenseKeyMessage">Enter a license key.</system:String>
+    <system:String x:Key="Str_LicenseInvalidMessage">The license key could not be validated.</system:String>
+    <system:String x:Key="Str_Ok">OK</system:String>
+    <system:String x:Key="Str_ErrorPrefix">Error: {0}</system:String>
+    <system:String x:Key="Str_SnapshotFailedFormat">Error: Snapshot failed — {0}</system:String>
+    <system:String x:Key="Str_RollbackFailedFormat">Rollback failed: {0}</system:String>
+    <system:String x:Key="Str_TrayStillRunning">Sandbox Timeline is still running in the system tray.</system:String>
+
+</ResourceDictionary>

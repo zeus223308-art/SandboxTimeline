@@ -1,0 +1,137 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>SandboxTimeline</RootNamespace>
+    <AssemblyName>SandboxTimeline</AssemblyName>
+    <StartupObject>SandboxTimeline.Program</StartupObject>
+    <ApplicationIcon>assets\icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <Version>1.0.0</Version>
+    <Company>Sandbox Timeline</Company>
+    <Product>Sandbox Timeline</Product>
+    <Description>Fast Windows snapshot timeline with optional sandbox guard for one-second system recovery.</Description>
+    <Copyright>Copyright © 2026 Sandbox Timeline. All rights reserved.</Copyright>
+    <Authors>Sandbox Timeline</Authors>
+    <AssemblyTitle>Sandbox Timeline</AssemblyTitle>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PublishSingleFile)' == 'true'">
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfContained>true</IncludeNativeLibrariesForSelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationManifest Include="app.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>assets\icon.ico</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AlphaVSS" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- AlphaVSS native + managed binaries must stay loose beside SandboxTimeline.exe (never inside single-file bundle) -->
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' Or '$(PlatformTarget)' == 'x64'">
+    <Content Include="$(NuGetPackageRoot)alphavss\*\build\net45\AlphaVSS*.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <PublishState>Included</PublishState>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)alphavss.native.netcore\2.0.3\runtimes\win-x64\native\AlphaVSS.x64.dll">
+      <Link>AlphaVSS.x64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <PublishState>Included</PublishState>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)alphavss.native.netcore\2.0.3\runtimes\win-x64\native\Ijwhost.dll">
+      <Link>Ijwhost.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <PublishState>Included</PublishState>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)alphavss\2.0.3\lib\netcoreapp3.1\AlphaVSS.Common.dll">
+      <Link>AlphaVSS.Common.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <PublishState>Included</PublishState>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <ExcludeFromSingleFile Include="AlphaVSS.x64.dll" />
+    <ExcludeFromSingleFile Include="AlphaVSS.x86.dll" />
+    <ExcludeFromSingleFile Include="AlphaVSS.Common.dll" />
+    <ExcludeFromSingleFile Include="AlphaVSS.dll" />
+    <ExcludeFromSingleFile Include="Ijwhost.dll" />
+    <ExcludeFromSingleFile Include="runtimes/win-x64/native/AlphaVSS.x64.dll" />
+    <ExcludeFromSingleFile Include="runtimes/win-x64/native/Ijwhost.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="src\**" />
+    <Page Remove="src\**" />
+    <None Remove="src\**" />
+    <EmbeddedResource Remove="src\**" />
+  </ItemGroup>
+
+  <Target Name="CopyAlphaVSSNativeDLLs" AfterTargets="Publish">
+    <ItemGroup>
+      <AlphaVSSFiles Include="$(NuGetPackageRoot)alphavss\**\AlphaVSS*.dll" />
+      <AlphaVSSFiles Include="$(NuGetPackageRoot)alphavss.native.netcore\**\runtimes\win-x64\native\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AlphaVSSFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="[SUCCESS] AlphaVSS Native DLLs are forcefully copied to publish directory: $(PublishDir)" />
+  </Target>
+
+  <Target Name="CopyAlphaVSSNativeDLLsToOutput" AfterTargets="Build" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+    <ItemGroup>
+      <AlphaVSSOutputFiles Include="$(NuGetPackageRoot)alphavss\**\AlphaVSS*.dll" />
+      <AlphaVSSOutputFiles Include="$(NuGetPackageRoot)alphavss.native.netcore\**\runtimes\win-x64\native\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AlphaVSSOutputFiles)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="VerifyAlphaVssNativePublishLayout" AfterTargets="CopyAlphaVSSNativeDLLs">
+    <Error Condition="'$(PublishSingleFile)' == 'true' AND !Exists('$(PublishDir)AlphaVSS.x64.dll')"
+           Text="Publish failed: AlphaVSS.x64.dll was not copied to '$(PublishDir)'." />
+    <Error Condition="'$(PublishSingleFile)' == 'true' AND !Exists('$(PublishDir)Ijwhost.dll')"
+           Text="Publish failed: Ijwhost.dll was not copied to '$(PublishDir)'." />
+    <Error Condition="'$(PublishSingleFile)' == 'true' AND !Exists('$(PublishDir)AlphaVSS.Common.dll')"
+           Text="Publish failed: AlphaVSS.Common.dll was not copied to '$(PublishDir)'." />
+  </Target>
+
+</Project>
