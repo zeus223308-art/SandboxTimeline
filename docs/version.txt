@@ -1,2 +1,2 @@
-1.0.3
+1.0.4
 https://github.com/zeus223308-art/SandboxTimeline/releases/latest/download/SandboxTimeline-win-x64.zip

@@ -12,13 +12,8 @@ internal static class UpdateConfiguration
 
     public static bool IsAutoUpdateEnabled()
     {
-#if DEBUG
         var fromEnvironment = ReadOptionalBooleanEnvironmentVariable(UpdateEnabledEnvironmentVariable);
         return fromEnvironment ?? false;
-#else
-        var fromEnvironment = ReadOptionalBooleanEnvironmentVariable(UpdateEnabledEnvironmentVariable);
-        return fromEnvironment ?? true;
-#endif
     }
 
     public static string ResolveVersionManifestUrl()
@@ -39,26 +34,33 @@ internal static class UpdateConfiguration
             return true;
         }
 
+        if (ContainsUnsafeSyncFolderMarker(targetDirectory))
+        {
+            return true;
+        }
+
         try
         {
             var fullPath = Path.GetFullPath(targetDirectory);
-            if (fullPath.Contains("OneDrive", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            if (fullPath.Contains("iCloudDrive", StringComparison.OrdinalIgnoreCase) ||
-                fullPath.Contains("Dropbox", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
+            return ContainsUnsafeSyncFolderMarker(fullPath);
         }
         catch
         {
             return true;
         }
+    }
 
-        return false;
+    private static bool ContainsUnsafeSyncFolderMarker(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return true;
+        }
+
+        return path.Contains("OneDrive", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("iCloudDrive", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("Dropbox", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("Google Drive", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool? ReadOptionalBooleanEnvironmentVariable(string variableName)

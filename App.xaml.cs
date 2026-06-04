@@ -46,6 +46,10 @@ public partial class App : System.Windows.Application
 
         StartupDiagnostics.Log("App.OnStartup begin.");
 
+        StartupDiagnostics.Log(
+            $"Install folder='{AppContext.BaseDirectory}', auto-update={UpdateConfiguration.IsAutoUpdateEnabled()}, " +
+            $"unsafeFolder={UpdateConfiguration.IsUnsafeAutoUpdateTargetDirectory(AppContext.BaseDirectory)}.");
+
 
 
         LocalizationService.ApplyStartupCulture();
@@ -167,6 +171,18 @@ public partial class App : System.Windows.Application
     private void ScheduleDeferredSilentAutoUpdate(MainWindow mainWindow, string[] startupArguments)
 
     {
+
+        if (!UpdateConfiguration.IsAutoUpdateEnabled())
+
+        {
+
+            StartupDiagnostics.Log("Silent auto-update is off; startup will not exit for patching.");
+
+            return;
+
+        }
+
+
 
         _ = RunDeferredSilentAutoUpdateAsync(mainWindow, startupArguments);
 

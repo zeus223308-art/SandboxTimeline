@@ -35,7 +35,15 @@ public sealed class UpdateManager
     {
         if (!UpdateConfiguration.IsAutoUpdateEnabled())
         {
-            StartupDiagnostics.Log("Silent auto-update disabled for this build/configuration.");
+            StartupDiagnostics.Log("Silent auto-update disabled (default). Set SANDBOXTIMELINE_UPDATE_ENABLED=1 to enable.");
+            return false;
+        }
+
+        var targetDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        if (UpdateConfiguration.IsUnsafeAutoUpdateTargetDirectory(targetDirectory))
+        {
+            StartupDiagnostics.Log(
+                $"Silent auto-update bypassed: unsafe install folder '{targetDirectory}'. Move the app out of OneDrive/sync folders.");
             return false;
         }
 
@@ -90,14 +98,6 @@ public sealed class UpdateManager
                     updateWorkspace,
                     cancellationToken)
                 .ConfigureAwait(false);
-
-            var targetDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            if (UpdateConfiguration.IsUnsafeAutoUpdateTargetDirectory(targetDirectory))
-            {
-                StartupDiagnostics.Log(
-                    $"Silent auto-update bypassed: unsafe target directory '{targetDirectory}' (sync folder such as OneDrive).");
-                return false;
-            }
 
             var executablePath = ResolveApplicationExecutablePath(targetDirectory);
             if (!File.Exists(executablePath))
