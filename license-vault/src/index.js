@@ -1,14 +1,20 @@
-const serverless = require("serverless-http");
 const { createApp } = require("./createApp");
 
-let app;
-let handler;
+let appInstance;
+let appReady;
 
-module.exports = async (req, res) => {
-  if (!app) {
-    app = await createApp();
-    handler = serverless(app);
+async function getApp() {
+  if (!appReady) {
+    appReady = createApp().then((app) => {
+      appInstance = app;
+      return app;
+    });
   }
 
-  return handler(req, res);
+  return appReady;
+}
+
+module.exports = async (req, res) => {
+  const app = await getApp();
+  return app(req, res);
 };

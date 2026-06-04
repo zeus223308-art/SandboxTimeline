@@ -35,8 +35,7 @@
         </a>
       </div>
       <p class="note">
-        이 사이트는 소개용 웹 페이지입니다. Sandbox Timeline은 Windows 데스크톱 앱이며 브라우저에서 실행되지 않습니다.
-        프리미엄 구매는 License Vault 서버 배포 후 <code>docs/purchase-config.js</code>의 <code>vaultBaseUrl</code>을 설정하세요.
+        Windows 데스크톱 앱입니다. zip을 <strong>OneDrive 밖</strong>(예: <code>C:\Apps\SandboxTimeline</code>)에 풀고 관리자 권한으로 실행하세요.
       </p>
     </div>
   </header>
@@ -64,13 +63,25 @@
       </div>
     </section>
 
+    <section class="install">
+      <h2>설치 방법</h2>
+      <ol>
+        <li>위 <strong>최신 버전 다운로드</strong>로 zip 받기</li>
+        <li><code>C:\Apps\SandboxTimeline\</code> 등 <strong>로컬 폴더</strong>에 압축 해제 (OneDrive 비권장)</li>
+        <li><code>SandboxTimeline.exe</code> 우클릭 → <strong>관리자 권한으로 실행</strong></li>
+        <li>SmartScreen → 추가 정보 → 실행</li>
+        <li>프리미엄은 <strong>프리미엄 구매</strong> 후 라이선스 키를 앱에 입력</li>
+      </ol>
+      <p><a href="INSTALL-ko.md">상세 설치 가이드 (INSTALL-ko.md)</a></p>
+    </section>
+
     <section class="requirements">
       <h2>시스템 요구 사항</h2>
       <ul>
         <li>Windows 11 (또는 Windows 10 22H2+)</li>
         <li>64비트(x64), 관리자 권한(UAC)</li>
         <li>Volume Shadow Copy Service 활성화</li>
-        <li>Windows Sandbox (샌드박스 가드, Pro 이상 권장)</li>
+        <li>Windows Sandbox (샌드박스 가드, <strong>Windows 11 Pro 이상</strong> — Home은 타임라인만)</li>
       </ul>
     </section>
 

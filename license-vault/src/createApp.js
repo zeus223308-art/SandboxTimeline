@@ -26,6 +26,29 @@ async function createApp() {
 
   const app = express();
 
+  app.get("/", (_req, res) => {
+    res.json({
+      service: "sandboxtimeline-license-vault",
+      ok: isDatabaseConfigured(),
+      endpoints: {
+        health: "GET /health",
+        checkout: "GET /v1/checkout/start",
+        webhook: "POST /v1/webhooks/stripe (Stripe sends events here — not visible in browser GET)",
+        webhook_probe: "GET /v1/webhooks/stripe (confirms URL is deployed)"
+      }
+    });
+  });
+
+  app.get("/v1/webhooks/stripe", (_req, res) => {
+    res.json({
+      ok: true,
+      message:
+        "Webhook endpoint is live. Stripe must POST signed events. In Stripe Dashboard use Send test events on this destination, or complete a test checkout.",
+      url: `${config.baseUrl}/v1/webhooks/stripe`,
+      database: usePostgres() ? "postgres" : "not-configured"
+    });
+  });
+
   app.get("/health", (_req, res) => {
     res.json({
       ok: isDatabaseConfigured(),
@@ -37,25 +60,9 @@ async function createApp() {
     });
   });
 
-  function requireVaultSecret(req, res, next) {
-    if (!config.licenseVaultSecret) {
-      next();
-      return;
-    }
-
-    const provided = (req.get("X-License-Vault-Secret") || "").trim();
-    if (provided !== config.licenseVaultSecret) {
-      res.status(401).json(buildRevokedResponse());
-      return;
-    }
-
-    next();
-  }
-
   app.post(
     "/v1/license/validate",
     express.json({ limit: "32kb" }),
-    requireVaultSecret,
     async (req, res) => {
       const licenseKeyHash = (req.body?.license_key_hash || req.body?.LicenseKeyHash || "")
         .trim()
