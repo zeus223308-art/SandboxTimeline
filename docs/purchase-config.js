@@ -1,3 +1,3 @@
 window.SandboxTimelinePurchaseConfig = {
-  vaultBaseUrl: "http://localhost:8787"
+  vaultBaseUrl: "https://license-vault-gules.vercel.app"
 };
