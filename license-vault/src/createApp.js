@@ -3,6 +3,8 @@ const path = require("path");
 const { config, assertStripeConfigured } = require("./config");
 const {
   ensureDatabaseReady,
+  isDatabaseConfigured,
+  usePostgres,
   findByHash,
   findByCheckoutSessionId,
   markRevealed
@@ -26,9 +28,12 @@ async function createApp() {
 
   app.get("/health", (_req, res) => {
     res.json({
-      ok: true,
+      ok: isDatabaseConfigured(),
       service: "sandboxtimeline-license-vault",
-      database: require("./db").usePostgres() ? "postgres" : "sqlite"
+      database: usePostgres() ? "postgres" : process.env.VERCEL ? "postgres-required" : "sqlite",
+      hint: isDatabaseConfigured()
+        ? null
+        : "Connect Vercel Storage → Postgres to this project (POSTGRES_URL)."
     });
   });
 

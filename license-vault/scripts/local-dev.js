@@ -1,5 +1,5 @@
-const { config } = require("./config");
-const { createApp } = require("./createApp");
+const { config } = require("../src/config");
+const { createApp } = require("../src/createApp");
 
 createApp().then((app) => {
   app.listen(config.port, () => {

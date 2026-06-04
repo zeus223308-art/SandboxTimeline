@@ -2,11 +2,11 @@
   "name": "sandboxtimeline-license-vault",
   "version": "1.0.0",
   "private": true,
+  "main": "src/index.js",
   "description": "Stripe Checkout + Webhook + license delivery + Vault validation API for Sandbox Timeline",
-  "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
+    "start": "node scripts/local-dev.js",
+    "dev": "node --watch scripts/local-dev.js",
     "vercel-build": "npm install"
   },
   "engines": {

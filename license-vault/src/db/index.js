@@ -1,6 +1,6 @@
 const { config } = require("../config");
 
-function usePostgres() {
+function hasPostgresUrl() {
   return Boolean(
     process.env.POSTGRES_URL ||
       process.env.sandboxtimeline_POSTGRES_URL ||
@@ -8,7 +8,23 @@ function usePostgres() {
   );
 }
 
-const impl = usePostgres() ? require("./postgres") : require("./sqlite");
+function usePostgres() {
+  return hasPostgresUrl();
+}
+
+function loadImpl() {
+  if (usePostgres()) {
+    return require("./postgres");
+  }
+
+  if (process.env.VERCEL) {
+    return require("./vercel-stub");
+  }
+
+  return require("./sqlite");
+}
+
+const impl = loadImpl();
 
 let readyPromise;
 
@@ -20,6 +36,11 @@ async function ensureDatabaseReady() {
         return;
       }
 
+      if (process.env.VERCEL) {
+        await impl.initDatabase();
+        return;
+      }
+
       impl.initDatabase(config.databasePath);
     })();
   }
@@ -27,8 +48,13 @@ async function ensureDatabaseReady() {
   return readyPromise;
 }
 
+function isDatabaseConfigured() {
+  return usePostgres() || !process.env.VERCEL;
+}
+
 module.exports = {
   usePostgres,
+  isDatabaseConfigured,
   ensureDatabaseReady,
   findByHash: (...args) => impl.findByHash(...args),
   findByCheckoutSessionId: (...args) => impl.findByCheckoutSessionId(...args),

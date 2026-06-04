@@ -1,5 +1,5 @@
 const serverless = require("serverless-http");
-const { createApp } = require("../src/createApp");
+const { createApp } = require("./createApp");
 
 let app;
 let handler;
@@ -7,9 +7,7 @@ let handler;
 module.exports = async (req, res) => {
   if (!app) {
     app = await createApp();
-    handler = serverless(app, {
-      binary: false
-    });
+    handler = serverless(app);
   }
 
   return handler(req, res);
