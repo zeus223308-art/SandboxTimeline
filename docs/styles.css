@@ -181,3 +181,9 @@ footer {
 footer p {
   margin: 0;
 }
+
+.version-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}

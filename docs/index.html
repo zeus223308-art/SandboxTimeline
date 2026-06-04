@@ -16,7 +16,8 @@
         1초급 VSS 타임라인 복구와 샌드박스 가드로 PC를 타임머신처럼 되돌리세요.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary"
+        <a id="downloadLatestBtn"
+           class="btn btn-primary"
            href="https://github.com/zeus223308-art/SandboxTimeline/releases/latest/download/SandboxTimeline-win-x64.zip"
            download="SandboxTimeline-win-x64.zip"
            rel="noopener">
@@ -69,7 +70,8 @@
       <h2>링크</h2>
       <ul>
         <li><a href="https://github.com/zeus223308-art/SandboxTimeline">소스 코드</a></li>
-        <li><a href="https://github.com/zeus223308-art/SandboxTimeline/releases">릴리스 / 설치 파일</a></li>
+        <li><a id="downloadLatestLink" href="https://github.com/zeus223308-art/SandboxTimeline/releases/latest/download/SandboxTimeline-win-x64.zip">최신 zip 직접 다운로드</a></li>
+        <li><a href="https://github.com/zeus223308-art/SandboxTimeline/releases">릴리스 목록</a></li>
         <li><a href="https://github.com/zeus223308-art/SandboxTimeline#readme">README (빌드 방법)</a></li>
       </ul>
     </section>
@@ -77,6 +79,8 @@
 
   <footer>
     <p>© 2026 Sandbox Timeline · <a href="https://github.com/zeus223308-art/SandboxTimeline">zeus223308-art/SandboxTimeline</a></p>
+    <p id="latestVersionNote" class="version-note"></p>
   </footer>
+  <script src="download-latest.js"></script>
 </body>
 </html>
