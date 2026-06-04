@@ -12,11 +12,7 @@ namespace SandboxTimeline;
 /// </summary>
 public sealed class TrayIconService : IDisposable
 {
-    private static readonly string[] EmbeddedIconPackUris =
-    [
-        "pack://application:,,,/assets/icon.ico",
-        "pack://application:,,,/SandboxTimeline;component/assets/icon.ico"
-    ];
+    private const string PrimaryPackIconUri = "pack://application:,,,/assets/icon.ico";
 
     private readonly MainWindow _mainWindow;
     private HwndSource? _hwndSource;
@@ -42,53 +38,68 @@ public sealed class TrayIconService : IDisposable
 
     private void CreateMessageWindow()
     {
-        var parameters = new HwndSourceParameters("SandboxTimelineTraySink")
+        try
         {
-            Width = 0,
-            Height = 0,
-            PositionX = 0,
-            PositionY = 0,
-            WindowStyle = 0,
-            ExtendedWindowStyle = 0,
-            ParentWindow = IntPtr.Zero
-        };
+            var parameters = new HwndSourceParameters("SandboxTimelineTraySink")
+            {
+                Width = 0,
+                Height = 0,
+                PositionX = 0,
+                PositionY = 0,
+                WindowStyle = 0,
+                ExtendedWindowStyle = 0,
+                ParentWindow = IntPtr.Zero
+            };
 
-        _hwndSource = new HwndSource(parameters);
-        _hwndSource.AddHook(TrayWndProc);
+            _hwndSource = new HwndSource(parameters);
+            _hwndSource.AddHook(TrayWndProc);
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("Tray message window creation failed.", ex);
+            _hwndSource = null;
+        }
     }
 
     private void AddTrayIcon()
     {
-        if (_hwndSource == null)
+        try
         {
-            return;
+            if (_hwndSource == null)
+            {
+                return;
+            }
+
+            _iconHandle = LoadTrayIconHandle();
+            if (_iconHandle == IntPtr.Zero)
+            {
+                StartupDiagnostics.Log("Tray icon handle is zero; skipping Shell_NotifyIcon registration.");
+                return;
+            }
+
+            var data = new ShellTrayIcon.NotifyIconData
+            {
+                cbSize = Marshal.SizeOf<ShellTrayIcon.NotifyIconData>(),
+                hWnd = _hwndSource.Handle,
+                uID = 1,
+                uFlags = ShellTrayIcon.NifMessage | ShellTrayIcon.NifIcon | ShellTrayIcon.NifTip,
+                uCallbackMessage = ShellTrayIcon.TrayIconMessageId,
+                hIcon = _iconHandle,
+                szTip = "Sandbox Timeline"
+            };
+
+            if (!ShellTrayIcon.Shell_NotifyIcon(ShellTrayIcon.NimAdd, ref data))
+            {
+                StartupDiagnostics.Log("Shell_NotifyIcon(NIM_ADD) returned false; tray icon not shown.");
+                return;
+            }
+
+            _added = true;
         }
-
-        _iconHandle = LoadTrayIconHandle();
-        if (_iconHandle == IntPtr.Zero)
+        catch (Exception ex)
         {
-            StartupDiagnostics.Log("Tray icon handle is zero; skipping Shell_NotifyIcon registration.");
-            return;
+            StartupDiagnostics.Log("AddTrayIcon failed; tray bypassed.", ex);
         }
-
-        var data = new ShellTrayIcon.NotifyIconData
-        {
-            cbSize = Marshal.SizeOf<ShellTrayIcon.NotifyIconData>(),
-            hWnd = _hwndSource.Handle,
-            uID = 1,
-            uFlags = ShellTrayIcon.NifMessage | ShellTrayIcon.NifIcon | ShellTrayIcon.NifTip,
-            uCallbackMessage = ShellTrayIcon.TrayIconMessageId,
-            hIcon = _iconHandle,
-            szTip = "Sandbox Timeline"
-        };
-
-        if (!ShellTrayIcon.Shell_NotifyIcon(ShellTrayIcon.NimAdd, ref data))
-        {
-            StartupDiagnostics.Log("Shell_NotifyIcon(NIM_ADD) returned false; tray icon not shown.");
-            return;
-        }
-
-        _added = true;
     }
 
     private IntPtr LoadTrayIconHandle()
@@ -96,155 +107,74 @@ public sealed class TrayIconService : IDisposable
         try
         {
             _trayIcon?.Dispose();
-            _trayIcon = null;
-
-            _trayIcon =
-                LoadEmbeddedTrayIcon()
-                ?? LoadFileTrayIcon()
-                ?? LoadExecutableAssociatedTrayIcon()
-                ?? LoadSystemApplicationFallbackIcon();
-
-            if (_trayIcon == null)
-            {
-                StartupDiagnostics.Log("All tray icon loaders returned null; tray will be unavailable.");
-                return IntPtr.Zero;
-            }
-
-            return _trayIcon.Handle;
+            _trayIcon = LoadTrayIconWithFallback();
+            return _trayIcon?.Handle ?? IntPtr.Zero;
         }
         catch (Exception ex)
         {
-            StartupDiagnostics.Log("LoadTrayIconHandle failed; attempting system fallback icon.", ex);
-
-            try
-            {
-                _trayIcon?.Dispose();
-                _trayIcon = LoadSystemApplicationFallbackIcon();
-                return _trayIcon?.Handle ?? IntPtr.Zero;
-            }
-            catch (Exception fallbackEx)
-            {
-                StartupDiagnostics.Log("System fallback tray icon load failed.", fallbackEx);
-                return IntPtr.Zero;
-            }
+            StartupDiagnostics.Log("LoadTrayIconHandle failed; tray bypassed.", ex);
+            return IntPtr.Zero;
         }
     }
 
-    private static Icon? LoadEmbeddedTrayIcon()
+    private static Icon LoadTrayIconWithFallback()
     {
-        foreach (var packUri in EmbeddedIconPackUris)
+        try
         {
-            try
+            var resourceStream = System.Windows.Application.GetResourceStream(new Uri(PrimaryPackIconUri));
+            if (resourceStream?.Stream != null)
             {
-                var resourceStream = System.Windows.Application.GetResourceStream(new Uri(packUri, UriKind.Absolute));
-                if (resourceStream?.Stream == null)
-                {
-                    continue;
-                }
-
-                using (resourceStream.Stream)
-                {
-                    return new Icon(resourceStream.Stream);
-                }
+                using var iconStream = resourceStream.Stream;
+                return new Icon(iconStream);
             }
-            catch (Exception ex)
-            {
-                StartupDiagnostics.Log($"Embedded tray icon load failed for '{packUri}'.", ex);
-            }
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("Pack URI tray icon load failed; using fallback icon.", ex);
         }
 
         try
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var manifestName = assembly
-                .GetManifestResourceNames()
-                .FirstOrDefault(name => name.EndsWith("icon.ico", StringComparison.OrdinalIgnoreCase));
-
-            if (manifestName == null)
+            var executablePath = Assembly.GetExecutingAssembly().Location;
+            if (!string.IsNullOrWhiteSpace(executablePath))
             {
-                return null;
+                var associatedIcon = Icon.ExtractAssociatedIcon(executablePath);
+                if (associatedIcon != null)
+                {
+                    return (Icon)associatedIcon.Clone();
+                }
             }
-
-            using var stream = assembly.GetManifestResourceStream(manifestName);
-            return stream == null ? null : new Icon(stream);
         }
         catch (Exception ex)
         {
-            StartupDiagnostics.Log("Manifest resource tray icon load failed.", ex);
-            return null;
-        }
-    }
-
-    private static Icon? LoadFileTrayIcon()
-    {
-        var candidatePaths = new[]
-        {
-            Path.Combine(AppContext.BaseDirectory, "assets", "icon.ico"),
-            Path.Combine(AppContext.BaseDirectory, "icon.ico"),
-            Path.Combine(Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory, "assets", "icon.ico")
-        };
-
-        foreach (var iconPath in candidatePaths.Distinct(StringComparer.OrdinalIgnoreCase))
-        {
-            if (!File.Exists(iconPath))
-            {
-                continue;
-            }
-
-            try
-            {
-                return new Icon(iconPath);
-            }
-            catch (Exception ex)
-            {
-                StartupDiagnostics.Log($"File tray icon load failed for '{iconPath}'.", ex);
-            }
+            StartupDiagnostics.Log("ExtractAssociatedIcon tray fallback failed.", ex);
         }
 
-        return null;
-    }
-
-    private static Icon? LoadExecutableAssociatedTrayIcon()
-    {
-        try
-        {
-            var executablePath = Environment.ProcessPath;
-            if (string.IsNullOrWhiteSpace(executablePath) || !File.Exists(executablePath))
-            {
-                return null;
-            }
-
-            var associated = Icon.ExtractAssociatedIcon(executablePath);
-            return associated == null ? null : (Icon)associated.Clone();
-        }
-        catch (Exception ex)
-        {
-            StartupDiagnostics.Log("Executable associated tray icon load failed.", ex);
-            return null;
-        }
-    }
-
-    private Icon? LoadSystemApplicationFallbackIcon()
-    {
-        StartupDiagnostics.Log("Using SystemIcons.Application as tray icon fallback.");
         return (Icon)SystemIcons.Application.Clone();
     }
 
     private IntPtr TrayWndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
-        if (msg == ShellTrayIcon.TrayIconMessageId)
+        try
         {
-            var mouseMsg = (int)lParam;
-            if (mouseMsg == ShellTrayIcon.WmLButtonDblClk)
+            if (msg == ShellTrayIcon.TrayIconMessageId)
             {
-                _mainWindow.Dispatcher.BeginInvoke(_mainWindow.ShowAndActivateTimeline);
-                handled = true;
+                var mouseMsg = (int)lParam;
+                if (mouseMsg == ShellTrayIcon.WmLButtonDblClk)
+                {
+                    _mainWindow.Dispatcher.BeginInvoke(_mainWindow.ShowAndActivateTimeline);
+                    handled = true;
+                }
+                else if (mouseMsg == ShellTrayIcon.WmRButtonUp)
+                {
+                    ShowContextMenu();
+                    handled = true;
+                }
             }
-            else if (mouseMsg == ShellTrayIcon.WmRButtonUp)
-            {
-                ShowContextMenu();
-                handled = true;
-            }
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("TrayWndProc handler failed.", ex);
         }
 
         return IntPtr.Zero;
@@ -252,15 +182,22 @@ public sealed class TrayIconService : IDisposable
 
     private void ShowContextMenu()
     {
-        if (_hwndSource == null)
+        try
         {
-            return;
-        }
+            if (_hwndSource == null)
+            {
+                return;
+            }
 
-        var trayWindowHandle = _hwndSource.Handle;
-        _mainWindow.Dispatcher.BeginInvoke(
-            () => _mainWindow.ShowTrayContextMenuAtCursor(trayWindowHandle),
-            DispatcherPriority.Send);
+            var trayWindowHandle = _hwndSource.Handle;
+            _mainWindow.Dispatcher.BeginInvoke(
+                () => _mainWindow.ShowTrayContextMenuAtCursor(trayWindowHandle),
+                DispatcherPriority.Send);
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("ShowContextMenu failed.", ex);
+        }
     }
 
     public void Dispose()
@@ -272,16 +209,23 @@ public sealed class TrayIconService : IDisposable
 
         _disposed = true;
 
-        if (_added && _hwndSource != null)
+        try
         {
-            var data = new ShellTrayIcon.NotifyIconData
+            if (_added && _hwndSource != null)
             {
-                cbSize = Marshal.SizeOf<ShellTrayIcon.NotifyIconData>(),
-                hWnd = _hwndSource.Handle,
-                uID = 1
-            };
-            ShellTrayIcon.Shell_NotifyIcon(ShellTrayIcon.NimDelete, ref data);
-            _added = false;
+                var data = new ShellTrayIcon.NotifyIconData
+                {
+                    cbSize = Marshal.SizeOf<ShellTrayIcon.NotifyIconData>(),
+                    hWnd = _hwndSource.Handle,
+                    uID = 1
+                };
+                ShellTrayIcon.Shell_NotifyIcon(ShellTrayIcon.NimDelete, ref data);
+                _added = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("Tray icon removal failed during dispose.", ex);
         }
 
         if (_trayIcon != null)

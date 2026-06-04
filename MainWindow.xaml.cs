@@ -68,6 +68,32 @@ public partial class MainWindow : Window
         Topmost = false;
     }
 
+    public void ForceStartupPresentation()
+    {
+        ShowStartupShell();
+
+        try
+        {
+            if (_servicesAttached)
+            {
+                EnableTimelineControls(true);
+                EnsureMainExperienceStarted();
+                TryShowWelcomeGuide();
+                EnsureTimelineInteractive();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(StatusText.Text))
+            {
+                StatusText.Text = Loc.Get("Str_StartupLoading");
+            }
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Log("ForceStartupPresentation failed.", ex);
+        }
+    }
+
     public void ReportAutoUpdateStatus(string message)
     {
         StatusText.Text = message;
@@ -425,16 +451,38 @@ public partial class MainWindow : Window
 
     public void ReportPartialStartupFailure(string message, Exception ex)
     {
-        Dispatcher.Invoke(() =>
+        if (!Dispatcher.CheckAccess())
         {
+            Dispatcher.Invoke(() => ReportPartialStartupFailure(message, ex));
+            return;
+        }
+
+        try
+        {
+            ShowStartupShell();
             StatusText.Text = message;
             MessageBox.Show(
                 ExceptionDisplayFormatter.FormatWithPrefix(message, ex),
                 Loc.Get("Str_WindowTitle"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
-            EnsureTimelineInteractive();
-        });
+        }
+        catch (Exception reportEx)
+        {
+            StartupDiagnostics.Log("ReportPartialStartupFailure failed.", reportEx);
+        }
+
+        try
+        {
+            if (_servicesAttached)
+            {
+                EnsureTimelineInteractive();
+            }
+        }
+        catch (Exception interactiveEx)
+        {
+            StartupDiagnostics.Log("EnsureTimelineInteractive after partial failure failed.", interactiveEx);
+        }
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
