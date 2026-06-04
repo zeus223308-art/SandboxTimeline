@@ -1,12 +1,18 @@
 (function () {
   var config = window.SandboxTimelinePurchaseConfig || {};
-  var base = (config.vaultBaseUrl || "").replace(/\/+$/, "");
-  var button = document.getElementById("buyPremiumBtn");
+  var storeUrl = (config.storeListingUrl || "").trim();
+  var buyButton = document.getElementById("buyPremiumBtn");
+  var downloadBtn = document.getElementById("downloadLatestBtn");
 
-  if (!button || !base) {
-    return;
+  if (buyButton && storeUrl) {
+    buyButton.href = storeUrl;
+    buyButton.textContent = "Microsoft Store에서 설치 · 프리미엄";
+    buyButton.removeAttribute("aria-disabled");
   }
 
-  button.href = base + "/v1/checkout/start";
-  button.removeAttribute("aria-disabled");
+  if (downloadBtn && storeUrl) {
+    downloadBtn.textContent = "Microsoft Store에서 설치";
+    downloadBtn.href = storeUrl;
+    downloadBtn.removeAttribute("download");
+  }
 })();

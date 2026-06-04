@@ -550,6 +550,38 @@
 
                                                         Click="ActivateLicense_Click" />
 
+                                                <Button x:Name="PurchaseStorePremiumButton"
+
+                                                        Content="{DynamicResource Str_PurchasePremiumStore}"
+
+                                                        Width="240"
+
+                                                        MinHeight="36"
+
+                                                        Visibility="Collapsed"
+
+                                                        Background="#007ACC"
+
+                                                        Foreground="White"
+
+                                                        Margin="0,0,0,0"
+
+                                                        VerticalAlignment="Center"
+
+                                                        BorderThickness="0"
+
+                                                        FontFamily="{StaticResource UiFontFamily}"
+
+                                                        FontSize="13"
+
+                                                        FontWeight="SemiBold"
+
+                                                        Padding="12,6"
+
+                                                        Cursor="Hand"
+
+                                                        Click="PurchaseStorePremium_Click" />
+
                                                 <Button x:Name="BtnRetry"
 
                                                         Content="{DynamicResource Str_BtnRetry}"

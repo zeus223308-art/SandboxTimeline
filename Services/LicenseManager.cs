@@ -18,6 +18,10 @@ public sealed class LicenseManager : IDisposable
 
     private readonly LicenseTokenStore _tokenStore = new();
 
+    private readonly bool _usesStoreDistribution;
+
+    private readonly StoreLicenseService? _storeLicenseService;
+
     private LicenseState _cachedState = LicenseState.Free();
 
     private StoredLicenseToken? _storedToken;
@@ -44,6 +48,10 @@ public sealed class LicenseManager : IDisposable
 
         _vaultClient = new LicenseVaultClient(_httpClient, WebhookUrl);
 
+        _usesStoreDistribution = StoreDistribution.IsEnabled;
+
+        _storeLicenseService = _usesStoreDistribution ? new StoreLicenseService() : null;
+
 
 
 #if DEBUG
@@ -59,6 +67,8 @@ public sealed class LicenseManager : IDisposable
         else
 
 #endif
+
+        if (!_usesStoreDistribution)
 
         {
 
@@ -89,6 +99,10 @@ public sealed class LicenseManager : IDisposable
 
 
     public string WebhookUrl { get; }
+
+
+
+    public bool UsesMicrosoftStore => _usesStoreDistribution;
 
 
 
@@ -236,6 +250,16 @@ public sealed class LicenseManager : IDisposable
 
     {
 
+        if (_usesStoreDistribution)
+
+        {
+
+            return await RequestStorePurchaseAsync(cancellationToken).ConfigureAwait(false);
+
+        }
+
+
+
         if (string.IsNullOrWhiteSpace(licenseKey))
 
         {
@@ -340,9 +364,97 @@ public sealed class LicenseManager : IDisposable
 
 
 
+    public async Task<LicenseActivationResult> RequestStorePurchaseAsync(
+
+        CancellationToken cancellationToken = default)
+
+    {
+
+        if (!_usesStoreDistribution || _storeLicenseService is null)
+
+        {
+
+            return LicenseActivationResult.Failed(Loc.Get("Str_StorePurchaseUnavailable"));
+
+        }
+
+
+
+        var purchaseResult = await _storeLicenseService.RequestPurchaseAsync(cancellationToken)
+
+            .ConfigureAwait(false);
+
+
+
+        if (purchaseResult.OpenStoreListing &&
+
+            !string.IsNullOrWhiteSpace(purchaseResult.StoreListingUri))
+
+        {
+
+            try
+
+            {
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+
+                {
+
+                    FileName = purchaseResult.StoreListingUri,
+
+                    UseShellExecute = true
+
+                });
+
+            }
+
+            catch
+
+            {
+
+            }
+
+        }
+
+
+
+        await RefreshStoreEntitlementAsync(cancellationToken).ConfigureAwait(false);
+
+
+
+        if (_cachedState.IsPremium)
+
+        {
+
+            return LicenseActivationResult.Succeeded(Loc.Get("Str_PremiumActivatedThanks"));
+
+        }
+
+
+
+        return LicenseActivationResult.Failed(
+
+            purchaseResult.UserMessage ?? Loc.Get("Str_StorePurchaseFailed"));
+
+    }
+
+
+
     public async Task SyncSubscriptionEntitlementAsync(CancellationToken cancellationToken = default)
 
     {
+
+        if (_usesStoreDistribution)
+
+        {
+
+            await RefreshStoreEntitlementAsync(cancellationToken).ConfigureAwait(false);
+
+            return;
+
+        }
+
+
 
         RestorePremiumFromEncryptedStore();
 
@@ -429,6 +541,18 @@ public sealed class LicenseManager : IDisposable
     public async Task RefreshLicenseAsync(CancellationToken cancellationToken = default)
 
     {
+
+        if (_usesStoreDistribution)
+
+        {
+
+            await RefreshStoreEntitlementAsync(cancellationToken).ConfigureAwait(false);
+
+            return;
+
+        }
+
+
 
         try
 
@@ -1050,13 +1174,79 @@ public sealed class LicenseManager : IDisposable
 
 
 
+    private async Task RefreshStoreEntitlementAsync(CancellationToken cancellationToken)
+
+    {
+
+        if (_storeLicenseService is null)
+
+        {
+
+            _cachedState = LicenseState.Free();
+
+            return;
+
+        }
+
+
+
+        var status = await _storeLicenseService.GetEntitlementAsync(cancellationToken).ConfigureAwait(false);
+
+
+
+        if (status.IsPremium)
+
+        {
+
+            _cachedState = new LicenseState(
+
+                IsValid: true,
+
+                IsPremium: true,
+
+                TrialSandboxEnabled: false,
+
+                ExpiresAtUtc: status.ExpiresAtUtc,
+
+                SubscriptionId: status.SubscriptionStoreId,
+
+                CustomerId: null);
+
+            _lastStartupDiagnostic = null;
+
+        }
+
+        else
+
+        {
+
+            _cachedState = LicenseState.Free();
+
+            _lastStartupDiagnostic = status.ErrorMessage;
+
+        }
+
+
+
+        LicenseChanged?.Invoke(this, EventArgs.Empty);
+
+    }
+
+
+
     public void Dispose()
 
     {
 
-        _vaultClient.Dispose();
+        if (!_usesStoreDistribution)
 
-        _httpClient.Dispose();
+        {
+
+            _vaultClient.Dispose();
+
+            _httpClient.Dispose();
+
+        }
 
     }
 

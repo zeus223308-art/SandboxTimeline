@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -13,7 +13,7 @@
     <ApplicationIcon>assets\icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Company>Sandbox Timeline</Company>
     <Product>Sandbox Timeline</Product>
     <Description>Fast Windows snapshot timeline with optional sandbox guard for one-second system recovery.</Description>
@@ -32,6 +32,11 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(StoreDistribution)' == 'true'">
+    <DefineConstants>$(DefineConstants);STORE_DISTRIBUTION</DefineConstants>
+    <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(PublishSingleFile)' == 'true'">

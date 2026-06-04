@@ -111,6 +111,7 @@ public partial class MainWindow : Window
         _servicesAttached = true;
         _lastKnownPremium = _license.IsPremium;
         WireEvents();
+        ConfigureLicensePurchaseUi();
         EnableTimelineControls(true);
         RefreshSandboxVirtualizationCapability();
         EnsureMainExperienceStarted();
@@ -997,6 +998,63 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void PurchaseStorePremium_Click(object sender, RoutedEventArgs e)
+    {
+        ClearLicenseFailureUi();
+        SetLicenseInputEnabled(false);
+        StatusText.Text = Loc.Get("Str_ValidatingLicense");
+
+        try
+        {
+            var result = await _license.RequestStorePurchaseAsync();
+            if (result.Success && _license.IsPremium)
+            {
+                ShowLicenseSuccessUi();
+            }
+            else
+            {
+                RefreshLicenseUi();
+                if (!string.IsNullOrWhiteSpace(result.StatusMessage))
+                {
+                    LicenseErrorText.Text = result.StatusMessage;
+                    LicenseErrorPanel.Visibility = Visibility.Visible;
+                    LicenseExpander.IsExpanded = true;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            RefreshLicenseUi();
+            ShowLicenseFailureUi();
+        }
+        finally
+        {
+            SetLicenseInputEnabled(true);
+        }
+    }
+
+    private void ConfigureLicensePurchaseUi()
+    {
+        if (_license is null)
+        {
+            return;
+        }
+
+        if (_license.UsesMicrosoftStore)
+        {
+            LicenseExpander.Header = Loc.Get("Str_UpgradePremiumStore");
+            LicenseKeyBox.Visibility = Visibility.Collapsed;
+            ValidateLicenseButton.Visibility = Visibility.Collapsed;
+            PurchaseStorePremiumButton.Visibility = Visibility.Visible;
+            return;
+        }
+
+        LicenseExpander.Header = Loc.Get("Str_ActivatePremiumLicense");
+        LicenseKeyBox.Visibility = Visibility.Visible;
+        ValidateLicenseButton.Visibility = Visibility.Visible;
+        PurchaseStorePremiumButton.Visibility = Visibility.Collapsed;
+    }
+
     private async void ActivateLicense_Click(object sender, RoutedEventArgs e)
     {
         var key = LicenseKeyBox.Text.Trim();
@@ -1084,12 +1142,19 @@ public partial class MainWindow : Window
 
     private void SetLicenseInputEnabled(bool enabled)
     {
+        if (_license?.UsesMicrosoftStore == true)
+        {
+            PurchaseStorePremiumButton.IsEnabled = enabled;
+            return;
+        }
+
         LicenseKeyBox.IsEnabled = enabled;
         ValidateLicenseButton.IsEnabled = enabled;
     }
 
     private void RefreshLicenseUi()
     {
+        ConfigureLicensePurchaseUi();
         if (_license.IsPremium)
         {
             LicenseBadge.Text = Loc.Get("Str_LicenseBadgePremium");

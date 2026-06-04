@@ -36,6 +36,15 @@
     <system:String x:Key="Str_AutoUpdateDownloading">Downloading the latest version safely...</system:String>
     <system:String x:Key="Str_AutoUpdateRestartSoon">Applying a new version. The app will restart in a moment...</system:String>
     <system:String x:Key="Str_ActivatePremiumLicense">Activate Premium License</system:String>
+    <system:String x:Key="Str_UpgradePremiumStore">Upgrade to Premium (Microsoft Store)</system:String>
+    <system:String x:Key="Str_PurchasePremiumStore">Subscribe in Microsoft Store</system:String>
+    <system:String x:Key="Str_StorePurchaseUnavailable">Microsoft Store purchase is not available in this build.</system:String>
+    <system:String x:Key="Str_StoreInstallRequired">Install Sandbox Timeline from the Microsoft Store to purchase Premium.</system:String>
+    <system:String x:Key="Str_StorePurchaseSucceeded">Premium purchase completed.</system:String>
+    <system:String x:Key="Str_StorePurchaseCancelled">Purchase was cancelled.</system:String>
+    <system:String x:Key="Str_StorePurchaseNetworkError">Could not reach Microsoft Store. Check your internet connection.</system:String>
+    <system:String x:Key="Str_StorePurchaseServerError">Microsoft Store returned an error. Try again later.</system:String>
+    <system:String x:Key="Str_StorePurchaseFailed">Premium purchase could not be completed.</system:String>
     <system:String x:Key="Str_EnterLicenseKey">Enter license key</system:String>
     <system:String x:Key="Str_ValidateLicense">Validate License</system:String>
 

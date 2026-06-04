@@ -7,7 +7,7 @@ internal static class ProductionLicenseConfiguration
     public const string DefaultProductionVaultEndpointUrl = "https://license-vault-gules.vercel.app/v1/license/validate";
     public const string ProductMetadataId = "prod_sandbox_timeline_premium_v1";
     public const string ProductCode = "sandbox_timeline";
-    public const string ClientVersion = "1.0.5";
+    public const string ClientVersion = "1.0.6";
 
     public static string ResolveVaultEndpointUrl(string? overrideUrl = null)
     {

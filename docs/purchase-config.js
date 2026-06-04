@@ -1,3 +1,3 @@
 window.SandboxTimelinePurchaseConfig = {
-  vaultBaseUrl: "https://license-vault-gules.vercel.app"
+  storeListingUrl: "https://apps.microsoft.com/store/detail/sandbox-timeline"
 };

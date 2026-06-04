@@ -36,6 +36,15 @@
     <system:String x:Key="Str_AutoUpdateDownloading">최신 버전을 안전하게 다운로드 중입니다...</system:String>
     <system:String x:Key="Str_AutoUpdateRestartSoon">새 버전을 적용합니다. 잠시 후 자동으로 다시 시작됩니다...</system:String>
     <system:String x:Key="Str_ActivatePremiumLicense">프리미엄 라이선스 활성화</system:String>
+    <system:String x:Key="Str_UpgradePremiumStore">프리미엄 업그레이드 (Microsoft Store)</system:String>
+    <system:String x:Key="Str_PurchasePremiumStore">Microsoft Store에서 구독</system:String>
+    <system:String x:Key="Str_StorePurchaseUnavailable">이 빌드에서는 Microsoft Store 구매를 사용할 수 없습니다.</system:String>
+    <system:String x:Key="Str_StoreInstallRequired">프리미엄 구매는 Microsoft Store에서 설치한 앱에서만 가능합니다.</system:String>
+    <system:String x:Key="Str_StorePurchaseSucceeded">프리미엄 구매가 완료되었습니다.</system:String>
+    <system:String x:Key="Str_StorePurchaseCancelled">구매가 취소되었습니다.</system:String>
+    <system:String x:Key="Str_StorePurchaseNetworkError">Microsoft Store에 연결할 수 없습니다. 인터넷 연결을 확인하세요.</system:String>
+    <system:String x:Key="Str_StorePurchaseServerError">Microsoft Store 오류입니다. 잠시 후 다시 시도하세요.</system:String>
+    <system:String x:Key="Str_StorePurchaseFailed">프리미엄 구매를 완료하지 못했습니다.</system:String>
     <system:String x:Key="Str_EnterLicenseKey">라이선스 키 입력</system:String>
     <system:String x:Key="Str_ValidateLicense">라이선스 확인</system:String>
 
