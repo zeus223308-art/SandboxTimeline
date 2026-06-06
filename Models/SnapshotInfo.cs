@@ -1,4 +1,4 @@
-﻿namespace SandboxTimeline;
+namespace SandboxTimeline;
 
 public sealed class SnapshotInfo
 {

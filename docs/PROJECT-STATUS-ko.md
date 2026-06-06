@@ -1,7 +1,8 @@
 # Sandbox Timeline — 진행 상황 (자동 저장)
 
-마지막 갱신: 2026-06-04 · 버전 **1.0.6** · 커밋 `28083f1` (master)  
-**상태: 일시 중단 — 다음은 Partner Center 가입부터**
+마지막 갱신: 2026-06-04 (세션 종료) · 버전 **1.0.6** · GitHub **master** 동기화됨
+
+**다음에 이어할 때:** Partner Center 가입부터 (`docs/STORE-PUBLISH.md`)
 
 ---
 

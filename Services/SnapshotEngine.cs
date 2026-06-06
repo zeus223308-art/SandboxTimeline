@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
 using Alphaleonis.Win32.Vss;
